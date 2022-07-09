@@ -19,15 +19,21 @@ namespace FormueConnect
 {
     public partial class LoginWindow : Window
     {
+
+
         public LoginWindow()
         {
             InitializeComponent();
         }
 
-        private async void LoginClick(object sender, RoutedEventArgs e)
-        {
-            // User data from UI fields
 
+        private Connection Conn = new();
+
+
+        private void LoginClick(object sender, RoutedEventArgs e)
+        {
+
+            // User data from UI fields
             Dictionary<string, string> credentials = new()
             {
                 ["username"] = Username.Text,
@@ -35,27 +41,21 @@ namespace FormueConnect
                 ["database"] = Database.Text
             };
 
-        // If relevant create multiple methods and a switch method to allow users to select login options
-        string connectionString = SqlStringAADInteractive(credentials);
+            Conn.Authenticate(credentials, "AADInteractive");
 
-            using (SqlConnection SqlConnection = new SqlConnection(connectionString))
-            {
-                await SqlConnection.OpenAsync();
-                Trace.WriteLine("Connected successfully!");
-                TableWindow tableWindow = new(SqlConnection, credentials);
-                this.Close();
-                tableWindow.Show();
+            if (!Conn.IsSqlConnNull()) {
+                LoginError();
+                return;
             }
+
+            TableWindow tableWindow = new();
+            this.Close();
+            tableWindow.Show();
         }
 
-        private string SqlStringAADInteractive(Dictionary<string,string> credentials)
+        private void LoginError()
         {
-            string connectionString = @"Server=" + credentials["server"] +
-                ";Authentication = Active Directory Interactive" +
-                ";Database=" + credentials["database"] +
-                ";User Id=" + credentials["username"];
-
-            return connectionString;
+            // Show the user something related to the failed event.
         }
     }
 }
