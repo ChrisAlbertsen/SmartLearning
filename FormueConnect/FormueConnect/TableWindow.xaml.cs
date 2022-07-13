@@ -17,41 +17,30 @@ using Microsoft.Data.SqlClient;
 
 namespace FormueConnect
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
+
     public partial class TableWindow : Window
     {
 
-        private SqlConnection SqlConn;
-        public TableWindow(SqlConnection SqlConnection)
+        static private Connection SqlConn = new();
+        public List<Table> TableList;
+
+        public TableWindow()
         {
             InitializeComponent();
-            SqlConn = SqlConnection;
-            NameFetcher();
+            BindTables();
         }
 
-        private void NameFetcher()
+        private void BindTables()
         {
-            string queryString = $@"SELECT TABLE_NAME
-                                FROM INFORMATION_SCHEMA.TABLES
-                                WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='{SqlConn.Database}'";
-
-            SqlCommand command = new SqlCommand(queryString, SqlConn);
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<string> tableNames = new();
-            while (reader.Read())
-            {
-                tableNames.Add(reader.GetString("TABLE_NAME"));
-            }
-            lbTableNames.ItemsSource = tableNames;
+            TableList = SqlConn.ConstructTables();
+            lbTableNames.DataContext = TableList;
         }
 
-        private void Print(object sender, SelectionChangedEventArgs args)
+        private void OpenTable(object sender, SelectionChangedEventArgs args)
         {
-            Trace.WriteLine("Its alive!!!");
+            Table selectedTable = (Table)args.AddedItems[0];
+            ColumnWindow columnWindow = new(selectedTable);
+            columnWindow.Show();
         }
-
     }
 }

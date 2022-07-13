@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:FormueConnect"
         mc:Ignorable="d"
         Title="Tables" Height="450" Width="800">
-    <Grid>
-        <ListBox Name="lbTableNames" SelectionChanged="Print" SelectionMode="Single"/>
-    </Grid>
+    <ScrollViewer>
+    <StackPanel>
+        <ListBox Name="lbTableNames" ItemsSource="{Binding}" DisplayMemberPath="Name" SelectionChanged="OpenTable" SelectionMode="Single"/>
+    </StackPanel>
+    </ScrollViewer>
 </Window>

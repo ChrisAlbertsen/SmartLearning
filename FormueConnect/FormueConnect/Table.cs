@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace FormueConnect
 {
-    internal class Class1
+    public class Table
     {
+
+        public string Name {get; set;}
+        public Dictionary<string, string> Columns;
+
+        public Table(string name)
+        {
+            Name = name;
+        }
+
+        public string ToString()
+        {
+            return Name;
+        }
     }
 }

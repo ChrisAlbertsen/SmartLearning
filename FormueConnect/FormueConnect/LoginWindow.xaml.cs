@@ -30,7 +30,7 @@ namespace FormueConnect
         private Connection Conn = new();
 
 
-        private void LoginClick(object sender, RoutedEventArgs e)
+        private async void LoginClick(object sender, RoutedEventArgs e)
         {
 
             // User data from UI fields
@@ -41,9 +41,10 @@ namespace FormueConnect
                 ["database"] = Database.Text
             };
 
-            Conn.Authenticate(credentials, "AADInteractive");
+            await Conn.Authenticate(credentials, "FNInteractive");
 
-            if (!Conn.IsSqlConnNull()) {
+            Trace.WriteLine("Running after Authenticate");
+            if (Conn.IsSqlConnNull()) {
                 LoginError();
                 return;
             }
@@ -55,6 +56,7 @@ namespace FormueConnect
 
         private void LoginError()
         {
+            Trace.WriteLine("A login error has occured!!");
             // Show the user something related to the failed event.
         }
     }
