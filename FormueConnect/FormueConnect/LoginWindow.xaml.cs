@@ -41,9 +41,8 @@ namespace FormueConnect
                 ["database"] = Database.Text
             };
 
-            await Conn.Authenticate(credentials, "FNInteractive");
+            await Conn.Authenticate(credentials, "AADInteractive");
 
-            Trace.WriteLine("Running after Authenticate");
             if (Conn.IsSqlConnNull()) {
                 LoginError();
                 return;
