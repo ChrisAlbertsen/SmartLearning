@@ -21,7 +21,6 @@ namespace FormueConnect
     public partial class TableWindow : Window
     {
 
-        static private Connection SqlConn = new();
         public List<Table> TableList;
 
         public TableWindow()
@@ -32,7 +31,7 @@ namespace FormueConnect
 
         private void BindTables()
         {
-            TableList = SqlConn.ConstructTables();
+            TableList = Connection.ConstructTables();
             lbTableNames.DataContext = TableList;
         }
 

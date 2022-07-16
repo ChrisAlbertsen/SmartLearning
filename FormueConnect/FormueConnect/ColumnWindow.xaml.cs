@@ -20,20 +20,19 @@ namespace FormueConnect
     {
 
         public Table Table;
-        static private Connection SqlConn = new();
         public List<Column> Columns { get; set; }
 
     public ColumnWindow(Table selectedTable)
         {
             InitializeComponent();
             Table = selectedTable;
-            Columns = SqlConn.ConstructColumns(Table.Name);
+            Columns = Connection.ConstructColumns(Table.Name);
             DataContext = Columns;
         }
 
         private void WriteClick(object sender, RoutedEventArgs e)
         {
-            SqlConn.WriteColumns(Columns, Table.Name);
+            Connection.WriteColumns(Columns, Table.Name);
         }
     }
 }

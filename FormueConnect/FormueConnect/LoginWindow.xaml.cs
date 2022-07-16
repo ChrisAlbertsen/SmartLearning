@@ -19,34 +19,20 @@ namespace FormueConnect
 {
     public partial class LoginWindow : Window
     {
-
+        
+        public Credentials credentials { get; set; } = new(); // Password isn't handled here, so public is safe
 
         public LoginWindow()
         {
             InitializeComponent();
+            this.DataContext = credentials;
         }
-
-
-        private Connection Conn = new();
 
 
         private async void LoginClick(object sender, RoutedEventArgs e)
         {
-
-            // User data from UI fields
-            Dictionary<string, string> credentials = new()
-            {
-                ["username"] = Username.Text,
-                ["server"] = Server.Text,
-                ["database"] = Database.Text
-            };
-
-            await Conn.Authenticate(credentials, "AADInteractive");
-
-            if (Conn.IsSqlConnNull()) {
-                LoginError();
-                return;
-            }
+            
+            Connection.Authenticate(credentials, "AADInteractive");
 
             TableWindow tableWindow = new();
             this.Close();

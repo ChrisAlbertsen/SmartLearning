@@ -10,94 +10,163 @@ using Microsoft.Data.SqlClient;
 
 namespace FormueConnect
 {
-    internal class Connection
+    internal static class Connection
     {
-
-        private static SqlConnection? SqlConn = new();
+        private static string? ConnectionString;
+        private static Credentials credentials;
 
         // handles potential variations of the string neeeded for authentication with SqlConnection
         // more functions could easily be added later
-        private Dictionary<string, Func<Dictionary<string,string>, string>> AuthenticationStrings = new()
+        private static Dictionary<string, Func<Credentials, string>> AuthenticationStrings = new()
         {
             ["AADInteractive"] = credentials =>
             {
-                string connectionString = $@"Server={credentials["server"]}
+                string connectionString = $@"Server={credentials.Server}
                 ;Authentication=Active Directory Interactive
-                ;Database={credentials["database"]}
-                ;User Id={credentials["username"]}";
+                ;Database={credentials.Database}
+                ;User Id={credentials.Username}";
 
                 return connectionString;
             }
         };
 
-
-        public Task Authenticate(Dictionary<string,string> credentials, string authenticationProtocol)
+        public static void RunWithOpenSqlConnection(Action<SqlConnection> connectionCallBack)
         {
-            string connectionString = AuthenticationStrings[authenticationProtocol](credentials);
-            SqlConn.ConnectionString = connectionString;
-            return SqlConn.OpenAsync();
-        }
-
-
-        public bool IsSqlConnNull()
-        {
-            return SqlConn == null;
-        }
-
-        public List<Table> ConstructTables()
-        {
-            string queryString = $@"SELECT TABLE_SCHEMA, TABLE_NAME
-                                FROM INFORMATION_SCHEMA.TABLES
-                                WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='{SqlConn.Database}'";
-
-            SqlCommand command = new(queryString, SqlConn);
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<Table> tableList = new();
-            while (reader.Read())
+            SqlConnection conn = null;
+            try
             {
-                Table tempTable = new(reader.GetString(0) + "." + reader.GetString(1));
-                tableList.Add(tempTable);
+                conn = new SqlConnection(ConnectionString);
+                connectionCallBack(conn);
             }
+            catch
+            {
+                MessageBox.Show("Failed to connect!");
+            }
+            finally
+            {
+                if (conn != null) conn.Dispose();
+            }
+        }
+
+        public static void ExecuteSqlDataReader(string sqlString, Action<SqlDataReader> readerCallBack)
+        {
+            RunWithOpenSqlConnection(delegate (SqlConnection conn)
+            {
+                SqlCommand cmd = null;
+                SqlDataReader reader = null;
+                try
+                {
+                    cmd = new(sqlString, conn);
+                    reader = cmd.ExecuteReader();
+                    readerCallBack(reader);
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to execute query!");
+                }
+                finally
+                {
+                    if (reader != null) reader.Dispose();
+                    if (cmd != null) cmd.Dispose();
+                }
+            });
+        }
+
+        public static void ExecuteSqlNonQuery(string sqlString)
+        {
+            RunWithOpenSqlConnection(delegate (SqlConnection conn)
+            {
+                SqlCommand cmd = null;
+                try
+                {
+                    cmd = new(sqlString, conn);
+                    cmd.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Error in executing NonQuery");
+                }
+                finally
+                {
+                    if (cmd != null) cmd.Dispose();
+                }
+            });
+        }
+
+        public static void Authenticate(Credentials tempCredentials, string authenticationProtocol)
+        {
+            string tempConnectionString = AuthenticationStrings[authenticationProtocol](tempCredentials);
+
+            SqlConnection SqlConn = null;
+            try
+            {
+                SqlConn = new(tempConnectionString);
+                ConnectionString = tempConnectionString;
+                credentials = tempCredentials;
+            }
+            catch
+            {
+                MessageBox.Show("Failed to login!");
+            }
+            finally
+            {
+                if (SqlConn != null) SqlConn.Dispose();
+            }
+        }
+
+        public static List<Table> ConstructTables()
+        {
+            string sqlString = $@"SELECT TABLE_SCHEMA, TABLE_NAME
+                                FROM INFORMATION_SCHEMA.TABLES
+                                WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='{credentials.Database}'";
+            List<Table> tableList = new();
+            ExecuteSqlDataReader(sqlString, delegate(SqlDataReader reader) {
+                while (reader.Read())
+                {
+                    Table tempTable = new(reader.GetString(0) + "." + reader.GetString(1));
+                    tableList.Add(tempTable);
+                }
+            });
+
             return tableList;
         }
 
-        public List<Column> ConstructColumns(string Name)
+        public static List<Column> ConstructColumns(string Name)
         {
-            string queryString = $@"SELECT TOP 1 *
+            string sqlString = $@"SELECT TOP 1 *
                                     FROM {Name}";
 
-            SqlCommand command = new(queryString, SqlConn);
-            SqlDataReader reader = command.ExecuteReader();
-
             List<Column> columns = new();
-            
-            for(int i = 0; i < reader.FieldCount; i++) { 
-                Column tempColumn = new(reader.GetName(i), reader.GetDataTypeName(i));
-                columns.Add(tempColumn);
-            }
+            ExecuteSqlDataReader(sqlString, delegate (SqlDataReader reader) {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    Column tempColumn = new(reader.GetName(i), reader.GetDataTypeName(i));
+                    columns.Add(tempColumn);
+                }
+            });         
 
             return columns;
         }
 
-        public void WriteColumns(List<Column> Columns, string Table)
+        public static void WriteColumns(List<Column> Columns, string Table)
         {
             string INSERT_INTO = $"INSERT INTO {Table} (";
             string VALUES = " VALUES (";
             Column tempCol;
-            for(int i=0; i < Columns.Count; i++)
+            for (int i = 0; i < Columns.Count; i++)
             {
                 tempCol = Columns[i];
                 INSERT_INTO += tempCol.Name + ", ";
                 VALUES += "'" + tempCol.UserInput + "', ";
             }
-            char[] charsToTrim = {',',' '};
+            char[] charsToTrim = { ',', ' ' };
             INSERT_INTO = INSERT_INTO.Trim(charsToTrim);
             VALUES = VALUES.Trim(charsToTrim);
-            string queryString = INSERT_INTO + ")" + VALUES + ");";
 
-            SqlCommand command = new(queryString, SqlConn);
-            command.ExecuteNonQuery();
+            string sqlString = INSERT_INTO + ")" + VALUES + ");";
+
+            ExecuteSqlNonQuery(sqlString); // implement delegate to allow for cleaning after execution
+  
             MessageBox.Show("I wrote to the database");
         }
     }
