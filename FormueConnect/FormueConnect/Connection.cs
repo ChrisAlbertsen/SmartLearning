@@ -6,14 +6,14 @@ using System.Windows;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
-
+using FormueConnect.Models;
 
 namespace FormueConnect
 {
     internal static class Connection
     {
         private static string? ConnectionString;
-        private static Credentials credentials;
+        public static Credentials? credentials;
 
         // handles potential variations of the string neeeded for authentication with SqlConnection
         // more functions could easily be added later
@@ -32,10 +32,11 @@ namespace FormueConnect
 
         public static void RunWithOpenSqlConnection(Action<SqlConnection> connectionCallBack)
         {
-            SqlConnection conn = null;
+            SqlConnection? conn = null;
             try
             {
                 conn = new SqlConnection(ConnectionString);
+                conn.Open();
                 connectionCallBack(conn);
             }
             catch
@@ -52,8 +53,8 @@ namespace FormueConnect
         {
             RunWithOpenSqlConnection(delegate (SqlConnection conn)
             {
-                SqlCommand cmd = null;
-                SqlDataReader reader = null;
+                SqlCommand? cmd = null;
+                SqlDataReader? reader = null;
                 try
                 {
                     cmd = new(sqlString, conn);
@@ -76,7 +77,7 @@ namespace FormueConnect
         {
             RunWithOpenSqlConnection(delegate (SqlConnection conn)
             {
-                SqlCommand cmd = null;
+                SqlCommand? cmd = null;
                 try
                 {
                     cmd = new(sqlString, conn);
@@ -97,10 +98,11 @@ namespace FormueConnect
         {
             string tempConnectionString = AuthenticationStrings[authenticationProtocol](tempCredentials);
 
-            SqlConnection SqlConn = null;
+            SqlConnection? conn = null;
             try
             {
-                SqlConn = new(tempConnectionString);
+                conn = new(tempConnectionString);
+                conn.Open();
                 ConnectionString = tempConnectionString;
                 credentials = tempCredentials;
             }
@@ -110,26 +112,11 @@ namespace FormueConnect
             }
             finally
             {
-                if (SqlConn != null) SqlConn.Dispose();
+                if (conn != null) conn.Dispose();
             }
         }
 
-        public static List<Table> ConstructTables()
-        {
-            string sqlString = $@"SELECT TABLE_SCHEMA, TABLE_NAME
-                                FROM INFORMATION_SCHEMA.TABLES
-                                WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='{credentials.Database}'";
-            List<Table> tableList = new();
-            ExecuteSqlDataReader(sqlString, delegate(SqlDataReader reader) {
-                while (reader.Read())
-                {
-                    Table tempTable = new(reader.GetString(0) + "." + reader.GetString(1));
-                    tableList.Add(tempTable);
-                }
-            });
 
-            return tableList;
-        }
 
         public static List<Column> ConstructColumns(string Name)
         {

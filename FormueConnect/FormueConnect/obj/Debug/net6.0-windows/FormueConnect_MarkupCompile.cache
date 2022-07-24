@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\App.xaml
-3641992371
+3458393198
 
-9190683743
+12578621764
 206-886899339
-ColumnWindow.xaml;LoginWindow.xaml;TableWindow.xaml;
+Views\ColumnWindow.xaml;Views\LoginWindow.xaml;Views\TableWindow.xaml;
 
 False
 

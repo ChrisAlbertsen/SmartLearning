@@ -24,11 +24,9 @@ C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\bi
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\bin\Debug\net6.0-windows\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\bin\Debug\net6.0-windows\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.csproj.AssemblyReference.cache
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\LoginWindow.g.cs
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\App.g.cs
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect_MarkupCompile.cache
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect_MarkupCompile.lref
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\LoginWindow.baml
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.g.resources
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.AssemblyInfoInputs.cache
@@ -40,7 +38,9 @@ C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\ob
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.pdb
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\FormueConnect.genruntimeconfig.cache
 C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\ref\FormueConnect.dll
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\TableWindow.g.cs
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\TableWindow.baml
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\ColumnWindow.g.cs
-C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\ColumnWindow.baml
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\ColumnWindow.g.cs
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\LoginWindow.g.cs
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\TableWindow.g.cs
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\ColumnWindow.baml
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\LoginWindow.baml
+C:\Users\ChrisAlbertsen\Desktop\SmartLearning\git\FormueConnect\FormueConnect\obj\Debug\net6.0-windows\Views\TableWindow.baml
