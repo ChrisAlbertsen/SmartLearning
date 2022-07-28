@@ -8,7 +8,7 @@
         Title="Tables" Height="450" Width="800">
     <ScrollViewer>
     <StackPanel>
-        <ListBox Name="lbTableNames" ItemsSource="{Binding tables}" DisplayMemberPath="Name" SelectionChanged="OpenTable" SelectionMode="Single"/>
+        <ListBox Name="lbTableNames" ItemsSource="{Binding tables}" DisplayMemberPath="Name" SelectionChanged="TableClick" SelectionMode="Single"/>
     </StackPanel>
     </ScrollViewer>
 </Window>

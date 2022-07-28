@@ -6,14 +6,12 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
-using FormueConnect.Models;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Microsoft.Data.SqlClient;
 
 
 namespace FormueConnect.Views
@@ -22,21 +20,22 @@ namespace FormueConnect.Views
     public partial class TableWindow : Window
     {
 
-        public List<Models.Table> TableList;
+        ViewModels.TableViewModel viewModel;
 
         public TableWindow()
         {
             InitializeComponent();
-            ViewModels.TableViewModel tableViewModel = new();
-            tableViewModel.ConstructTables();
-            this.DataContext = tableViewModel;
+            viewModel = new();
+            viewModel.ConstructTables();
+            this.DataContext = viewModel;
         }
 
-        private void OpenTable(object sender, SelectionChangedEventArgs args)
+        private void TableClick(object sender, SelectionChangedEventArgs args)
         {
-            Table? selectedTable = (Table?)args.AddedItems[0];
-            ColumnWindow columnWindow = new(selectedTable);
-            columnWindow.Show();
+            viewModel.TableClickHandler(args.AddedItems[0]);
+            //Models.Table selectedTable = (Models.Table)args.AddedItems[0];
+            //ColumnWindow columnWindow = new(selectedTable);
+            //columnWindow.Show();
         }
     }
 }

@@ -19,21 +19,17 @@ namespace FormueConnect.Views
 
     public partial class ColumnWindow : Window
     {
-
-        public Models.Table Table;
-        public List<Column> Columns { get; set; }
-
-    public ColumnWindow(Models.Table selectedTable)
+        ViewModels.ColumnViewModel viewModel;
+    public ColumnWindow(ViewModels.ColumnViewModel viewModelTemp)
         {
             InitializeComponent();
-            Table = selectedTable;
-            Columns = Connection.ConstructColumns(Table.Name);
-            DataContext = Columns;
+            viewModel = viewModelTemp;
+            DataContext = viewModel;
         }
 
         private void WriteClick(object sender, RoutedEventArgs e)
         {
-            Connection.WriteColumns(Columns, Table.Name);
+            viewModel.WriteClickHandler();
         }
     }
 }

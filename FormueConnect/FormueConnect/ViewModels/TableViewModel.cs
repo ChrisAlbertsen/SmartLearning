@@ -25,6 +25,12 @@ namespace FormueConnect.ViewModels
                     tables.Add(new Models.Table(reader.GetString(0) + "." + reader.GetString(1)));
                 }
             });
+
+        }
+
+        public void TableClickHandler(Object selectionObj)
+        {
+            ViewModels.ColumnViewModel columnViewModel = new((Models.Table)selectionObj);
         }
     }
 }

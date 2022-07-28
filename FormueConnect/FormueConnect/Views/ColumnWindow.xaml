@@ -8,7 +8,7 @@
         Title="Columns" Height="450" Width="800">
     <ScrollViewer>
         <StackPanel>
-            <ListView ItemsSource="{Binding}">
+            <ListView ItemsSource="{Binding Columns}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
